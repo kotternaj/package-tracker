@@ -1,3 +1,14 @@
+// Configuration
+
+var $dropMenu = $('[data-drop-menu]');
+var $navLinks = $('[data-nav-link]');
+var $checkpointTable = $('[data-checkpoint]');
+var $checkpointTableBody = $('[data-checkpoint-body]');
+var $inputField = $('[data-tracking-number]');
+var $mapContainer = $('[data-map-container]');
+var $theMap = $('[data-map]');
+var $alert = $('[data-alert]');
+
 // Get data from UPS API
 
 function getUPSdata (tracking){
