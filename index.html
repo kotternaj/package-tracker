@@ -35,7 +35,28 @@
             <button type="submit" class="btn btn-default">Submit</button>
         </form>
     </div>
-
+    <div class="alert hide" role="alert" data-alert></div>
+    <div class="map-container" data-map-container>
+        <div id="map" data-map></div>
+    </div> <p> testing this part</p>
+    <div class="table-container hide" data-checkpoint>
+        <div class="table-margins">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Stop #</th>
+                        <th scope="col">City</th>
+                        <th scope="col">State</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                </thead>
+                <tbody data-checkpoint-body>                    
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
