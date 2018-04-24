@@ -68,32 +68,6 @@ function trackingCodeAlertFedex(data){  //**FedEx**
     $alert.text(`Status: ${currentStatus}`);
 }
 
-// Get data from UPS API
-function getUPSdata (tracking){
-    var data = $.ajax({
-        'url': 'https://my-little-cors-proxy.herokuapp.com/https://wwwcie.ups.com/rest/Track', 
-        'type': 'POST',
-        'data': JSON.stringify({
-            'UPSSecurity': {
-                'UsernameToken': {
-                    'Username': 'trackmapdc',
-                    'Password': 'Maptrackdc123!',
-                },
-                'ServiceAccessToken': {
-                    'AccessLicenseNumber':'DD394D0B24CA9D88'
-                }
-            },
-                'TrackRequest': {
-                    'Request': {
-                        'RequestOption': '1'
-                    },
-                    'InquiryNumber': tracking
-                }
-        })
-    });
-    return data;
-};
-
 // Clears table
 
 function eraseTable(){
@@ -119,3 +93,54 @@ function createTable(dataArray) {
     }
 }
 
+// Submit tracking number and shipping company
+function formSubmit(){
+    var $trackingNumberForm = $(`[data-form="form"]`);
+
+    $trackingNumberForm.on('submit', function(event){
+        event.preventDefault();
+
+        var serializedArray = $trackingNumberForm.serializeArray();
+        var trackingNumber = serializedArray[0].value;
+        var shippingCompany = $('#sel1').val();
+
+        apiCalls(trackingNumber, shippingCompany);
+    });
+};
+
+// Process tracking # -  UPS or FedEx
+function apiCalls(tracking, shippingCompany) {
+
+    if (shippingCompany == 'UPS') {
+        getUPSdata(tracking).then(transformUpsData).then(geoLoop)
+    }
+    else if (shippingCompany == 'Fedex') {
+        getFedexData(tracking).then(transformFedexData).then(geoLoop)
+    }
+}
+
+// Get data from UPS API
+function getUPSdata (tracking){
+    var data = $.ajax({
+        'url': 'https://my-little-cors-proxy.herokuapp.com/https://wwwcie.ups.com/rest/Track', 
+        'type': 'POST',
+        'data': JSON.stringify({
+            'UPSSecurity': {
+                'UsernameToken': {
+                    'Username': 'trackmapdc',
+                    'Password': 'Maptrackdc123!',
+                },
+                'ServiceAccessToken': {
+                    'AccessLicenseNumber':'DD394D0B24CA9D88'
+                }
+            },
+                'TrackRequest': {
+                    'Request': {
+                        'RequestOption': '1'
+                    },
+                    'InquiryNumber': tracking
+                }
+        })
+    });
+    return data;
+};
