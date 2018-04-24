@@ -68,6 +68,134 @@ function trackingCodeAlertFedex(data){  //**FedEx**
     $alert.text(`Status: ${currentStatus}`);
 }
 
+// Transforms UPS object into the data we want to use
+
+function transformUpsData (data) {
+    
+    // Checks to see response from UPS API is tracking data
+
+    if (data['TrackResponse']) {
+
+        $inputField.removeClass('red-border');
+        $mapContainer.removeClass('move-map');
+        $theMap.addClass('map-border');
+        $alert.addClass('hide');
+
+        var transformData = data['TrackResponse']['Shipment']['Package']['Activity'];
+        var dataArray = [];
+        var key = "&key=AIzaSyCBha1IL7d4-v_Y9X8NA_R8Mk0qPHtTo64";
+        var pkgWeight = {
+            unit: data['TrackResponse']['Shipment']['Package']['PackageWeight']['UnitOfMeasurement']['Code'],
+            weight: data['TrackResponse']['Shipment']['Package']['PackageWeight']['Weight']
+        };
+        var service = data['TrackResponse']['Shipment']['Service']['Description'];
+
+        for (var x = 0; x < transformData.length; x++) {
+
+            var city = transformData[x]['ActivityLocation']['Address']['City'];
+            var state = transformData[x]['ActivityLocation']['Address']['StateProvinceCode'];
+            var status = transformData[x]['Status']['Description'];
+            var date = transformData[x]['Date'];
+            var date2 = `${date.slice(0,4)}-${date.slice(4,6)}-${date.slice(6,8)}`;
+            var time = transformData[x]['Time'];
+            var time2 = `${time.slice(0, 2)}:${time.slice(2, 4)}`;
+
+            if (city === undefined) {
+                break;
+            };
+
+            // Creates url that google geocoding API accepts as an ajax request
+
+            url = `https://maps.googleapis.com/maps/api/geocode/json?address=${city},+${state}${key}`;
+
+            // Gathers information about each checkpoint for promises
+
+            dataArray[x] = {
+                'city': city,
+                'state': state,
+                'status': status,
+                'date': date2,
+                'time': time2,
+                'URL': url
+            };
+        };
+
+        trackingCodeAlertUPS(transformData);
+        eraseTable();
+        createTable(dataArray);
+        return dataArray;
+
+    } else {
+        trackingCodeError();
+    };
+    
+};
+
+// Transforms Fedex object into the data we want to use
+
+function getFedexData (tracking) {
+    var url = `https://my-little-cors-proxy.herokuapp.com/http://shipit-api.herokuapp.com/api/carriers/fedex/${tracking}`
+    var data = $.get(url);
+    return data;
+};
+
+function transformFedexData (data) {
+    if (data['activities']) {
+
+        $inputField.removeClass('red-border');
+        $mapContainer.removeClass('move-map');
+        $theMap.addClass('map-border');
+        $alert.addClass('hide');
+
+        var transformData = data['activities'];
+        var dataArray = [];
+        var key = "&key=AIzaSyCBha1IL7d4-v_Y9X8NA_R8Mk0qPHtTo64";
+        var pkgWeight = {
+            unit: "",
+            weight: data['weight']
+        };
+        var service = data['service'];
+
+        for (x = 0; x < transformData.length; x++) {
+
+            var cityStateArray = transformData[x]['location'].split(" ");
+            var cityPop = transformData[x]['location'].split(',')
+            var datetimeSplit = transformData[x]['datetime'].split('T');
+            var city = cityPop[0];
+            var state = cityStateArray[1];
+            var status = transformData[x]['details'];
+            var date = datetimeSplit[0];
+            var time = datetimeSplit[1];
+            var time2 = time.slice(0, 5)
+
+            if (city === undefined) {
+                break;
+            };
+
+            url = `https://maps.googleapis.com/maps/api/geocode/json?address=${city},+${state}${key}`;
+
+            dataArray[x] = {
+                'city': city,
+                'state': state,
+                'status': status,
+                'date': date,
+                'time': time2,
+                'URL': url
+            };
+        };
+
+        trackingCodeAlertFedex(transformData);
+        eraseTable();
+        createTable(dataArray);
+        return dataArray; 
+
+    } else {
+        trackingCodeError();
+    };
+
+}
+
+
 // Clears table
 
 function eraseTable(){
