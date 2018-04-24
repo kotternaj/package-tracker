@@ -17,10 +17,26 @@
         <div class="navs">
             <img class="marker" src="images/places.png" data-drop-menu>
             <a class="logout-link" href="login-page.html" data-nav-link>Log Out</a>
+            <a class="map-link" href="index.html" data-nav-link>Map</a>
         </div>
     </header>
+    <div class="form-container">
+        <form data-form="form" class="add-to-form">
+            <div class="form-group">
+                <label for="tracking-number-input">Tracking Number</label>
+                <div id="form-inputs">
+                    <input class="form-control" name="tracking-input" id="tracking-number-input" placeholder=" ex. 11A32f3408sLX7" data-tracking-number>
+                    <select class="form-control" id="sel1">
+                        <option>UPS</option>
+                        <option>FedEx</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
 
-    
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
