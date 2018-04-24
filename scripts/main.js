@@ -132,7 +132,6 @@ function transformUpsData (data) {
 };
 
 // Transforms Fedex object into the data we want to use
-
 function getFedexData (tracking) {
     var url = `https://my-little-cors-proxy.herokuapp.com/http://shipit-api.herokuapp.com/api/carriers/fedex/${tracking}`
     var data = $.get(url);

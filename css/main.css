@@ -29,6 +29,47 @@ header {
     z-index: 999;
 }
 
+.name, a {
+    color: #464646;
+}
+.name {
+    font-size: 32px;
+    margin: 0 0 7px 12px;
+}
+
+.navs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 12px 10px 0;
+    position: relative;
+}
+
+a {
+    font-size: 24px;
+    margin-left: 12px;
+}
+
+a:hover, a:focus {
+    color: #464646;
+}
+
+a:focus {
+    text-decoration: none;
+}
+
+a img {
+    width: 31px;
+    height: 30px;
+    margin-bottom: 4px;
+}
+
+.marker {
+    width: 100%;
+    height: 100%;
+    display: none;
+    cursor: pointer;
+}
 
 @media screen and (max-width: 500px){
     .name {
@@ -77,6 +118,14 @@ header {
     }
 }
 
+.turn-open {
+    transform: rotate(90deg);
+}
+
+.show {
+    display: block;
+}
+
 .form-container {
     width: 100%;
     height: auto;
@@ -121,8 +170,37 @@ form {
     min-width: 200px;
 }
 
+.map-container {
+    margin-top: 62px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 60%;
+}
+
 @media screen and (min-width: 1280px) {
 
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(6px);
+    }
+    75% {
+        transform: translateX(-6px);
+    }
+}
+
+.hide {
+    display: none;
+}
+
+.move-map {
+    margin-top: 5px;
 }
 
 #form-inputs {
