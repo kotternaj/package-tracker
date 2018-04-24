@@ -144,3 +144,33 @@ function getUPSdata (tracking){
     });
     return data;
 };
+
+// Create coordinates from each city/state location
+function geoLoop(dataArray) {
+
+    var promArray = dataArray.map(function(obj){
+        return $alert.get(obj ['URL']);
+    });
+
+    Promise.all(promArray).then(function(geoArray){
+
+        for (var i = 0; i < geoArray.length; i++){
+            dataArray[i]['LatLng'] = geoArray[i].results[0].geometry.location;
+        }
+        return dataArray;
+    })
+    .then(removeDuplicates).then(createMap);
+}
+
+// Prevents non-unique coordinates from appearing on map
+function removeDuplicates(arr){
+    for (var i = 0; i < arr.length - 1; i++){
+        for (var j = 1; j < arr.length; j++){
+            if (arr[i]['city'] == arr[j]['city']){
+                arr.splce(j, 1)
+            }
+        }
+    }
+    return arr.reverse()
+};
+
