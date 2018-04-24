@@ -9,8 +9,66 @@ var $mapContainer = $('[data-map-container]');
 var $theMap = $('[data-map]');
 var $alert = $('[data-alert]');
 
-// Get data from UPS API
+// Toggle nav menu for smaller screens
+$dropMenu.on('click', function(){
+    $dropMenu.toggleClass('turn-open');
+    $navLinks.toggleClass('show');
+});
 
+// Creates and manages alerts and errors based on user input
+function removeShake(){
+    $inputField.removeClass('invalid-input');
+}
+
+function trackingCodeError(){
+    $mapContainer.addClass('move-map');
+    $inputField.addClass('red-border invalid-input');
+    setTimeout(removeShake, 800);
+    $alert.removeClass('hide');
+    $alert.addClass('alert-danger');
+    $alert.text('Invalid Tracking Number');
+    console.log('ERROR!')
+}
+
+function trackingCodeAlertUPS(data){   //**UPS** 
+    var currentStatus = data[0]['Status']['Description'];
+
+    $alert.removeClass('alert-danger');
+    $alert.removeClass('alert-success');
+    $alert.removeClass('alert-warning');
+    $alert.removeClass('hide');
+    $alert.text('');
+    $mapContainer.addClass('move-map');
+
+    if (currentStatus == 'Delivered'){
+        $alert.addClass('alert-success');
+    } 
+    else { 
+        $alert.addClass('alert-warning');        
+    }
+    $alert.text(`Status: ${currentStatus}`);
+}
+
+function trackingCodeAlertFedex(data){  //**FedEx**
+    var currentStatus = data[0]['Status']['Details'];
+
+    $alert.removeClass('alert-danger');
+    $alert.removeClass('alert-success');
+    $alert.removeClass('alert-warning');
+    $alert.removeClass('hide');
+    $alert.text('');
+    $mapContainer.addClass('move-map');
+
+    if (currentStatus == 'Delivered'){
+        $alert.addClass('alert-success');
+    } 
+    else { 
+        $alert.addClass('alert-warning');        
+    }
+    $alert.text(`Status: ${currentStatus}`);
+}
+
+// Get data from UPS API
 function getUPSdata (tracking){
     var data = $.ajax({
         'url': 'https://my-little-cors-proxy.herokuapp.com/https://wwwcie.ups.com/rest/Track', 
