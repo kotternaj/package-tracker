@@ -174,3 +174,75 @@ function removeDuplicates(arr){
     return arr.reverse()
 };
 
+// Map and point initialization - referenced in geoLoop function promise
+
+function createMap(data) {
+    var map;
+    var infowindow = new google.maps.Infowindow();
+
+    function initMap(){
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 6, 
+        });
+        drop();
+    }
+
+// Creates markers based on coordinates in data and centers maps using coord boundaries
+    function drop() {
+        var bounds = new google.maps.LatLngBounds();
+
+        for (var i = 0; i < data.length; i++) {
+            addMarkerWithTimemout(data[i], i * 500);
+            bounds.extend(data[i]['LatLng']);
+
+            if (i > 0) {
+                timeOutDrawLines(i);
+            }
+        }
+
+        function timeOutDrawLines(i) {
+            setTimeout(drawline, (i * 500) + 200, i);
+        }
+
+        function drawLine(i){
+            var cityCoordinates = [data[i-1]['LatLng'], data[i]['LatLng']];
+            var linePath = new google.maps.Polyline({
+                path: cityCoordinates, 
+                geodesic: true, 
+                strokeColor: '#1E8BC3',
+                strokeOpacity: 0.5, 
+                strokeWeight: 3
+            });
+
+            linePath.setMap(map);
+        }
+        map.fitBounds(bounds);
+    }
+
+ //Creating markers with info, placing them one at a time
+    function addMarkerWithTimemout(markerPosition, timeout) {
+        setTimeout(function() {
+            var newMarker = new google.maps.Marker({
+                position: markerPosition['LatLng'],
+                map: map, 
+                animation: google.maps.Animation.DROP, 
+            });
+            var markerObject = {
+                'Marker': newMarker,
+                'Info': `<strong>City</strong>: ${markerPosition['city']}</p>
+                <p><strong>State</strong>: ${markerPosition['state']}</p>`
+            }
+
+            markerObject['Marker'].addListener('click', function() {
+                infowindow.setContent(markerObject['Info']);
+                infowindow.open(map, markerObject['Marker']);
+            })
+        }, timeout);
+    }
+    initMap();
+};
+
+formSubmit();
+
+
+
