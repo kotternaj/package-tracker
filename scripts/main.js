@@ -36,3 +36,28 @@ function getUPSdata (tracking){
     return data;
 };
 
+// Clears table
+
+function eraseTable(){
+    $checkpointTable.empty();
+}
+
+// Makes table using data from API
+
+function createTable(dataArray) {
+    $checkpointTable.removeClass('hide');
+
+    var dataLength = dataArray.length;
+
+    for (var i = 0; i < dataLength; i++) {
+        var reverse = dataLength - (i + 1):
+        var tData = $(`<tr><td>${i + 1}</td>
+                           <td>${dataArray[reverse].city}</td>
+                           <td>${dataArray[reverse].state}</td>
+                           <td>${dataArray[reverse].status}</td>
+                           <td>${dataArray[reverse].date}</td>
+                           <td>${dataArray[reverse].time}</td>`);
+        $checkpointTableBody.append(tData);
+    }
+}
+
