@@ -209,7 +209,7 @@ function createTable(dataArray) {
     var dataLength = dataArray.length;
 
     for (var i = 0; i < dataLength; i++) {
-        var reverse = dataLength - (i + 1):
+        var reverse = dataLength - (i + 1);
         var tData = $(`<tr><td>${i + 1}</td>
                            <td>${dataArray[reverse].city}</td>
                            <td>${dataArray[reverse].state}</td>

@@ -180,7 +180,47 @@ form {
 }
 
 @media screen and (min-width: 1280px) {
+    .map-container {
+        height: 80%
+    }
+}
 
+#map {
+    width: 90%;
+    height: 100%;
+}
+
+.map-border, .table-margins {
+    border: 2px solid rgb(215, 215, 215);
+    border-radius: 5px;
+}
+
+.table-container{
+    margin: 62px auto 62px auto;
+    max-width: 765px;
+}
+
+.table {
+    width: 725px;
+}
+
+.table-margins {
+    margin-right: 15px;
+    margin-left: 15px;
+    overflow-x: scroll;
+}
+
+.table-striped {
+    margin: 0;
+    padding: 0;
+}
+
+.red-border {
+    border-color: red;
+}
+
+.invalid-input {
+    animation: shake 0.15s linear 4;
 }
 
 @keyframes shake {
